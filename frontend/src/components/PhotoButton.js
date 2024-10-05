@@ -4,7 +4,9 @@ import { colors } from '../styles/colors.js';
 import CustomIcon from './CustomIcon.js';
 
 const PhotoButton = ({ title, iconName, onPress }) => {
-  return (
+    
+  
+    return (
     <TouchableOpacity style={styles.button} onPress={onPress}>
       <CustomIcon name={iconName} size={24} color={colors.white} />
       <Text style={styles.buttonText}>{title}</Text>

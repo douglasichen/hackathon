@@ -9,6 +9,7 @@ import TitleHeader from '../components/TitleHeader.js';
 import ListItem from '../components/ListItem.js';
 import LocationAccessRequest from '../components/LocationAccessRequest.js';
 import PhotoButton from '../components/PhotoButton.js';
+import LocationButton from '../components/LocationButton.js';
 
 const demoData = [
   { id: '1', title: 'Solar Panels' },
@@ -47,6 +48,11 @@ const Main = ({ navigation }) => {
   };
 
   const handleTakePhoto = async () => {
+
+    // Ask for Location permission
+    <LocationAccessRequest />
+
+
     if (hasPermission) {
       let result = await ImagePicker.launchCameraAsync({
         allowsEditing: true,
@@ -72,6 +78,7 @@ const Main = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+        
       <View style={styles.container}>
         <LinearGradient
           colors={[colors.primaryGreen, colors.secondaryGreen]}
