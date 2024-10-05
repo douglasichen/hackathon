@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
 import { colors } from '../styles/colors.js';
 import CustomIcon from '../components/CustomIcon.js';
 import SwipeReveal from '../components/SwipeReveal.js';
@@ -8,36 +8,41 @@ const RecommendationsPostPage = ({ route, navigation }) => {
   const { title, imgBefore, imgAfter, text } = route.params;
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>{title || 'Recommendations'}</Text>
-      
-      {imgBefore && imgAfter ? (
-        <SwipeReveal image1={imgBefore} image2={imgAfter} style={styles.image} />
-      ) : null}
-      
-      <View style={styles.textContainer}>
-        <Text style={styles.descriptionText}>{text}</Text>
-      </View>
-      
-      <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
-        <CustomIcon name="arrow-left" size={24} color={colors.white} />
-        <Text style={styles.buttonText}>Go Back</Text>
-      </TouchableOpacity>
-    </ScrollView>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView style={styles.container}>
+        <Text style={styles.title}>{title || 'Recommendations'}</Text>
+        
+        {imgBefore && imgAfter ? (
+          <SwipeReveal image1={imgBefore} image2={imgAfter} style={styles.image} />
+        ) : null}
+        
+        <View style={styles.textContainer}>
+          <Text style={styles.descriptionText}>{text}</Text>
+        </View>
+        
+        <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
+          <CustomIcon name="arrow-left" size={24} color={colors.white} />
+          <Text style={styles.buttonText}>Go Back</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
     backgroundColor: colors.white,
+  },
+  container: {
+    flex: 1,
     padding: 20,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     color: colors.textPrimary,
-    marginBottom: 20,
+    marginBottom: 30,
     textAlign: 'center',
   },
   image: {
@@ -46,7 +51,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   textContainer: {
-    marginBottom: 20,
+    marginTop: 20,
+    marginBottom: 30,
   },
   descriptionText: {
     fontSize: 16,
