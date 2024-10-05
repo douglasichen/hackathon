@@ -10,8 +10,11 @@ import ListItem from '../components/ListItem.js';
 import LocationAccessRequest from '../components/LocationAccessRequest.js';
 import PhotoButton from '../components/PhotoButton.js';
 
+import StroadBefore from '../../assets/photos/stroadBefore.jpg'
+import StroadAfter from '../../assets/photos/stroadAfter.jpg'
+
 const demoData = [
-  { id: '1', title: 'Solar Panels' },
+  { id: '1', title: 'Stroad Transformation', imgBefore: StroadBefore, imgAfter:StroadAfter , text: "hihi" },
   { id: '2', title: 'Recycling Program' },
   { id: '3', title: 'Urban Garden' },
   { id: '4', title: 'Electric Vehicles' },
@@ -63,7 +66,8 @@ const Main = ({ navigation }) => {
   };
 
   const handleItemPress = (item) => {
-    navigation.navigate('RecommendationsPostPage', { title: item.title });
+    console.log(item.imgAfter);
+    navigation.navigate('RecommendationsPostPage', { title: item.title, imgBefore: item.imgBefore, imgAfter: item.imgAfter, text: item.text });
   };
 
   if (showLocationRequest) {

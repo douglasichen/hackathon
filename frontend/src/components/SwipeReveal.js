@@ -1,27 +1,30 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { View, StyleSheet, PanResponder, Animated, Dimensions, Image } from 'react-native';
-import Image1 from './assets/stroad.jpg';
-import Image2 from './assets/stroad2.jpg';
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get('window');
 
-export default function SwipeReveal() {
+export default function SwipeReveal({ image1, image2 }) {
+  // Set the width 30 units smaller than the screen width
+  const adjustedWidth = screenWidth - 30;
   const [revealWidth, setRevealWidth] = useState(0);
-  const [imageHeight, setImageHeight] = useState(screenHeight);
-  const pan = useRef(new Animated.ValueXY()).current;
+  const [imageHeight, setImageHeight] = useState(adjustedWidth); // Initial height
 
+  // Calculate the height based on the width and aspect ratio of the image
   useEffect(() => {
-    Image.getSize(Image1, (width, height) => {
-      const aspectRatio = width / height;
-      setImageHeight(screenWidth / aspectRatio);
+    Image.getSize(image1, (originalWidth, originalHeight) => {
+      const aspectRatio = originalWidth / originalHeight;
+      setImageHeight(adjustedWidth / aspectRatio); // Calculate height based on width and aspect ratio
     });
-  }, []);
+  }, [image1, adjustedWidth]);
+
+  const pan = useRef(new Animated.ValueXY()).current;
 
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderMove: (_, gestureState) => {
-        const newWidth = Math.max(0, Math.min(screenWidth, gestureState.moveX));
+        // Update the width of the reveal dynamically
+        const newWidth = Math.max(0, Math.min(adjustedWidth, gestureState.moveX));
         setRevealWidth(newWidth);
         Animated.event([null, { dx: pan.x }], { useNativeDriver: false })(_, gestureState);
       },
@@ -32,17 +35,13 @@ export default function SwipeReveal() {
   ).current;
 
   return (
-    <View style={styles.container} {...panResponder.panHandlers}>
-      <Image source={Image1} style={[styles.image, { height: imageHeight }]} resizeMode="cover" />
-      <Animated.View
-        style={[
-          styles.maskContainer,
-          {
-            width: revealWidth,
-          },
-        ]}
-      >
-        <Image source={Image2} style={[styles.image, { height: imageHeight }]} resizeMode="cover" />
+    <View style={[styles.container, { width: adjustedWidth, height: imageHeight }]} {...panResponder.panHandlers}>
+      {/* Background Image (image1) */}
+      <Image source={image1} style={[styles.image, { width: adjustedWidth, height: imageHeight }]} resizeMode="cover" />
+
+      {/* Foreground Image (image2) */}
+      <Animated.View style={[styles.maskContainer, { width: revealWidth, height: imageHeight }]}>
+        <Image source={image2} style={[styles.image, { width: adjustedWidth, height: imageHeight }]} resizeMode="cover" />
       </Animated.View>
     </View>
   );
@@ -50,11 +49,12 @@ export default function SwipeReveal() {
 
 const styles = StyleSheet.create({
   container: {
-    width: screenWidth,
     overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   image: {
-    width: screenWidth,
+    position: 'absolute',
   },
   maskContainer: {
     position: 'absolute',
