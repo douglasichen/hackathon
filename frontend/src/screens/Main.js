@@ -10,11 +10,11 @@ import ListItem from '../components/ListItem.js';
 import LocationAccessRequest from '../components/LocationAccessRequest.js';
 import PhotoButton from '../components/PhotoButton.js';
 
-import StroadBefore from '../../assets/photos/stroadBefore.jpg'
-import StroadAfter from '../../assets/photos/stroadAfter.jpg'
+import StroadBefore from '../../assets/photos/stroadBefore.jpg';
+import StroadAfter from '../../assets/photos/stroadAfter.jpg';
 
 const demoData = [
-  { id: '1', title: 'Stroad Transformation', imgBefore: StroadBefore, imgAfter:StroadAfter , text: "hihi" },
+  { id: '1', title: 'Stroad Transformation', imgBefore: StroadBefore, imgAfter: StroadAfter, text: "This transformation shows how a typical stroad can be converted into a more pedestrian-friendly and aesthetically pleasing street." },
   { id: '2', title: 'Recycling Program' },
   { id: '3', title: 'Urban Garden' },
   { id: '4', title: 'Electric Vehicles' },
@@ -66,7 +66,6 @@ const Main = ({ navigation }) => {
   };
 
   const handleItemPress = (item) => {
-    console.log(item.imgAfter);
     navigation.navigate('RecommendationsPostPage', { title: item.title, imgBefore: item.imgBefore, imgAfter: item.imgAfter, text: item.text });
   };
 
