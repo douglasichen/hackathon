@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 20,
+    padding: 15,
   },
   title: {
     fontSize: 24,
@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     marginBottom: 30,
     textAlign: 'center',
+    marginTop: 50,
   },
   image: {
     width: '100%',
@@ -51,8 +52,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   textContainer: {
-    marginTop: 20,
+    marginTop: 25,
     marginBottom: 30,
+    width: 350,
+    marginLeft: 10,
   },
   descriptionText: {
     fontSize: 16,
