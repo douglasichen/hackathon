@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { colors } from '../styles/colors.js';
 import CustomIcon from '../components/CustomIcon.js';
 import LocationButton from '../components/LocationButton.js';
+import TextInput from '../components/TextInput.js';
 
 const RecommendationsPostPage = ({ route, navigation }) => {
   const { photoUri, title } = route.params;
@@ -17,6 +18,7 @@ const RecommendationsPostPage = ({ route, navigation }) => {
       </TouchableOpacity>
 
       <LocationButton/>
+      <TextInput/>
     </View>
   );
 };
