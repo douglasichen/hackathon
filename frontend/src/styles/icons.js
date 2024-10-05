@@ -1,0 +1,22 @@
+export const iconNames = {
+    upload: 'cloud-upload',
+    camera: 'camera',
+    location: 'map-marker',
+    share: 'share-variant',
+    petition: 'file-sign',
+    info: 'information-outline',
+    close: 'close',
+    menu: 'menu',
+    home: 'home',
+    settings: 'cog',
+    user: 'account',
+    search: 'magnify',
+    leaf: 'leaf',
+    recycle: 'recycle',
+    energy: 'flash',
+    water: 'water',
+    tree: 'tree',
+    globe: 'earth',
+    trash: 'delete',
+    edit: 'pencil'
+};
