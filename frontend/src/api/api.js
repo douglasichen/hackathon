@@ -4,8 +4,11 @@ export async function sendImageToLambda(imageFile) {
     // const imageBase64 = await convertImageToBase64(imageFile);
     const imageUri = imageFile.photoUri;
     const imageBase64 = await uriToBase64(imageUri);
-    writeStringToFile("test.txt", imageBase64);
-    return;
+    let media_type = getMediaType(imageUri);
+    if (media_type == 'jpg') {media_type = 'jpeg';}
+    
+    // console.log(media_type);
+    
     // console.log(imageUri);
     // console.log(imageBase64);
 
@@ -20,8 +23,8 @@ export async function sendImageToLambda(imageFile) {
       system_prompt: "You are a an expert Urban Designer",
       prefix: "[",
       image: imageBase64,
+      media_type: media_type
     };
-
     // Call the API with the image and prompt
     const response = await fetch(apiUrl, {
       method: "POST",
@@ -32,22 +35,14 @@ export async function sendImageToLambda(imageFile) {
     });
 
     // Parse the JSON response
-    // const data = await response.json();
-    console.log("Lambda Response:", response);
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.error("Error calling Lambda:", error);
   }
 }
 
-// // Function to convert image to Base64 (same as before)
-// function convertImageToBase64(file) {
-//   return new Promise((resolve, reject) => {
-//     const reader = new FileReader();
-//     reader.onloadend = () => resolve(reader.result.split(",")[1]); // Extract Base64
-//     reader.onerror = reject;
-//     reader.readAsDataURL(file);
-//   });
-// }
+
 import * as FileSystem from "expo-file-system";
 
 async function uriToBase64(uri) {
@@ -63,24 +58,6 @@ async function uriToBase64(uri) {
   }
 }
 
-function removeBase64Prefix(base64String) {
-  const prefix = /^data:image\/[a-zA-Z]+;base64,/;
-  return base64String.replace(prefix, "");
-}
-
-import fs from "fs";
-
-/**
- * Writes a string to a file.
- * @param {string} filename - The name of the file.
- * @param {string} data - The string to write to the file.
- */
-function writeStringToFile(filename, data) {
-  fs.writeFile(filename, data, (err) => {
-    if (err) {
-      console.error("Error writing to file:", err);
-    } else {
-      console.log("File has been written successfully");
-    }
-  });
+function getMediaType(filename) {
+  return filename.split('.').pop();
 }

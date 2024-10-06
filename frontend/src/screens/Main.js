@@ -61,12 +61,6 @@ const Main = ({ navigation }) => {
         if (result.assets && result.assets.length > 0) {
           const photoUri = result.assets[0].uri; // Get the photo URI
 
-          // Send image to Lambda
-          const response = await sendImageToLambda({
-            photoUri: photoUri,
-          });
-          console.log(response);
-
           // Navigate and pass the image URI
           navigation.navigate("RecommendationsPostPage", {
             photoUri: photoUri,
