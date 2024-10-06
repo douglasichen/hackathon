@@ -1,14 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList, SafeAreaView, Alert, TouchableOpacity } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import * as ImagePicker from 'expo-image-picker';
-import { Camera } from 'expo-camera';
-import { colors } from '../styles/colors.js';
-import { iconNames } from '../styles/icons.js';
-import TitleHeader from '../components/TitleHeader.js';
-import ListItem from '../components/ListItem.js';
-import LocationAccessRequest from '../components/LocationAccessRequest.js';
-import PhotoButton from '../components/PhotoButton.js';
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  SafeAreaView,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import * as ImagePicker from "expo-image-picker";
+import { Camera } from "expo-camera";
+import { colors } from "../styles/colors.js";
+import { iconNames } from "../styles/icons.js";
+import TitleHeader from "../components/TitleHeader.js";
+import ListItem from "../components/ListItem.js";
+import LocationAccessRequest from "../components/LocationAccessRequest.js";
+import PhotoButton from "../components/PhotoButton.js";
+import { sendImageToLambda } from "../api/api.js";
 
 import StroadBefore from '../../assets/photos/stroadBefore.jpg';
 import StroadAfter from '../../assets/photos/stroadAfter.jpg';
@@ -24,11 +32,17 @@ const Main = ({ navigation }) => {
   useEffect(() => {
     setTimeout(() => setShowLocationRequest(false), 3000);
     (async () => {
-      const { status: libraryStatus } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(libraryStatus === 'granted' && cameraStatus === 'granted');
-      if (libraryStatus !== 'granted' || cameraStatus !== 'granted') {
-        Alert.alert('Sorry, we need camera and camera roll permissions to make this work!');
+      const { status: libraryStatus } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const { status: cameraStatus } =
+        await Camera.requestCameraPermissionsAsync();
+      setHasPermission(
+        libraryStatus === "granted" && cameraStatus === "granted"
+      );
+      if (libraryStatus !== "granted" || cameraStatus !== "granted") {
+        Alert.alert(
+          "Sorry, we need camera and camera roll permissions to make this work!"
+        );
       }
     })();
   }, []);
@@ -42,7 +56,29 @@ const Main = ({ navigation }) => {
     });
 
     if (!result.canceled) {
-      navigation.navigate('RecommendationsPostPage', { photoUri: result.assets[0].uri });
+      try {
+        if (result.assets && result.assets.length > 0) {
+          const photoUri = result.assets[0].uri;
+
+          // Send image to Lambda and get recommendations
+          const recommendations = await sendImageToLambda({
+            photoUri: photoUri,
+          });
+
+          // Navigate and pass the image URI and recommendations
+          navigation.navigate("RecommendationsPostPage", {
+            photoUri: photoUri,
+            recommendations: recommendations,
+            imgBefore: StroadBefore, 
+            imgAfter: StroadAfter,
+          });
+        } else {
+          console.error("No image selected");
+        }
+      } catch (error) {
+        console.error("Error processing image:", error);
+        Alert.alert("Error", "Failed to process the image. Please try again.");
+      }
     }
   };
 
@@ -57,16 +93,32 @@ const Main = ({ navigation }) => {
       });
 
       if (!result.canceled) {
-        navigation.navigate('RecommendationsPostPage', { photoUri: result.assets[0].uri });
+        try {
+          const photoUri = result.assets[0].uri;
 
+          // Send image to Lambda and get recommendations
+          const recommendations = await sendImageToLambda({
+            photoUri: photoUri,
+          });
+
+          // Navigate and pass the image URI and recommendations
+          navigation.navigate("RecommendationsPostPage", {
+            photoUri: photoUri,
+            recommendations: recommendations,
+          });
+        } catch (error) {
+          console.error("Error processing image:", error);
+          Alert.alert("Error", "Failed to process the image. Please try again.");
+        }
       }
     } else {
-      Alert.alert('Camera permission not granted');
+      Alert.alert("Camera permission not granted");
     }
   };
 
   const handleItemPress = (item) => {
     navigation.navigate('RecommendationsPostPage', { title: item.title, imgBefore: item.imgBefore, imgAfter: item.imgAfter, text: item.text });
+
   };
 
   if (showLocationRequest) {
@@ -91,20 +143,20 @@ const Main = ({ navigation }) => {
               <ListItem item={item} />
             </TouchableOpacity>
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={(item) => item.id}
           style={styles.list}
           contentContainerStyle={styles.listContent}
         />
         <View style={styles.buttonContainer}>
-          <PhotoButton 
-            title="Upload Photo" 
-            iconName={iconNames.upload} 
-            onPress={handleUploadPhoto} 
+          <PhotoButton
+            title="Upload Photo"
+            iconName={iconNames.upload}
+            onPress={handleUploadPhoto}
           />
-          <PhotoButton 
-            title="Take Photo" 
-            iconName={iconNames.camera} 
-            onPress={handleTakePhoto} 
+          <PhotoButton
+            title="Take Photo"
+            iconName={iconNames.camera}
+            onPress={handleTakePhoto}
           />
         </View>
       </View>
@@ -122,20 +174,20 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   gradientBackground: {
-    width: '100%',
+    width: "100%",
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
   },
   list: {
-    width: '100%',
+    width: "100%",
   },
   listContent: {
     paddingHorizontal: 20,
     paddingTop: 20,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     paddingHorizontal: 20,
     paddingBottom: 20,
   },
