@@ -35,8 +35,11 @@ export async function sendImageToLambda(imageFile) {
     });
 
     // Parse the JSON response
-    const data = await response.json();
-    return data;
+    const data = await response.json(0);
+    const arr = JSON.parse(data.response);
+    // const json = JSON.parse(data.response);
+    return arr;
+    // return data.response;
   } catch (error) {
     console.error("Error calling Lambda:", error);
   }

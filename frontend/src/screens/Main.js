@@ -16,7 +16,7 @@ import TitleHeader from "../components/TitleHeader.js";
 import ListItem from "../components/ListItem.js";
 import LocationAccessRequest from "../components/LocationAccessRequest.js";
 import PhotoButton from "../components/PhotoButton.js";
-import { sendImageToLambda } from "../api/api";
+import { sendImageToLambda } from "../api/api.js";
 
 const demoData = [
   { id: "1", title: "Solar Panels" },
@@ -57,19 +57,25 @@ const Main = ({ navigation }) => {
 
     if (!result.canceled) {
       try {
-        // Make sure to check if result.assets exists and has an item
         if (result.assets && result.assets.length > 0) {
-          const photoUri = result.assets[0].uri; // Get the photo URI
+          const photoUri = result.assets[0].uri;
 
-          // Navigate and pass the image URI
+          // Send image to Lambda and get recommendations
+          const recommendations = await sendImageToLambda({
+            photoUri: photoUri,
+          });
+
+          // Navigate and pass the image URI and recommendations
           navigation.navigate("RecommendationsPostPage", {
             photoUri: photoUri,
+            recommendations: recommendations,
           });
         } else {
           console.error("No image selected");
         }
       } catch (error) {
         console.error("Error processing image:", error);
+        Alert.alert("Error", "Failed to process the image. Please try again.");
       }
     }
   };
@@ -83,9 +89,23 @@ const Main = ({ navigation }) => {
       });
 
       if (!result.canceled) {
-        navigation.navigate("RecommendationsPostPage", {
-          photoUri: result.assets[0].uri,
-        });
+        try {
+          const photoUri = result.assets[0].uri;
+
+          // Send image to Lambda and get recommendations
+          const recommendations = await sendImageToLambda({
+            photoUri: photoUri,
+          });
+
+          // Navigate and pass the image URI and recommendations
+          navigation.navigate("RecommendationsPostPage", {
+            photoUri: photoUri,
+            recommendations: recommendations,
+          });
+        } catch (error) {
+          console.error("Error processing image:", error);
+          Alert.alert("Error", "Failed to process the image. Please try again.");
+        }
       }
     } else {
       Alert.alert("Camera permission not granted");
