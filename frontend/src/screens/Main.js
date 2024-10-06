@@ -18,11 +18,11 @@ import LocationAccessRequest from "../components/LocationAccessRequest.js";
 import PhotoButton from "../components/PhotoButton.js";
 import { sendImageToLambda } from "../api/api.js";
 
+import StroadBefore from '../../assets/photos/stroadBefore.jpg';
+import StroadAfter from '../../assets/photos/stroadAfter.jpg';
+
 const demoData = [
-  { id: "1", title: "Solar Panels" },
-  { id: "2", title: "Recycling Program" },
-  { id: "3", title: "Urban Garden" },
-  { id: "4", title: "Electric Vehicles" },
+  { id: '1', title: 'Stroad Transformation', imgBefore: StroadBefore, imgAfter: StroadAfter, text: "This transformation shows how a typical stroad can be converted into a more pedestrian-friendly and aesthetically pleasing street." },
 ];
 
 const Main = ({ navigation }) => {
@@ -69,6 +69,8 @@ const Main = ({ navigation }) => {
           navigation.navigate("RecommendationsPostPage", {
             photoUri: photoUri,
             recommendations: recommendations,
+            imgBefore: StroadBefore, 
+            imgAfter: StroadAfter,
           });
         } else {
           console.error("No image selected");
@@ -81,6 +83,8 @@ const Main = ({ navigation }) => {
   };
 
   const handleTakePhoto = async () => {
+    // Ask for Location permission
+    <LocationAccessRequest />
     if (hasPermission) {
       let result = await ImagePicker.launchCameraAsync({
         allowsEditing: true,
@@ -113,7 +117,8 @@ const Main = ({ navigation }) => {
   };
 
   const handleItemPress = (item) => {
-    navigation.navigate("RecommendationsPostPage", { title: item.title });
+    navigation.navigate('RecommendationsPostPage', { title: item.title, imgBefore: item.imgBefore, imgAfter: item.imgAfter, text: item.text });
+
   };
 
   if (showLocationRequest) {

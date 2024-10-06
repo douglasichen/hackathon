@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { colors } from '../styles/colors.js';
+import StroadBefore from '../../assets/photos/stroadBefore.jpg';
 
 const ListItem = ({ item }) => {
   return (
     <View style={styles.container}>
       <Image
-        source={{ uri: 'https://placehold.co/300x200' }}
+        source={StroadBefore}
         style={styles.image}
       />
       <View style={styles.titleContainer}>

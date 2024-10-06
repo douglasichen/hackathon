@@ -1,39 +1,20 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, SafeAreaView } from 'react-native';
 import { colors } from '../styles/colors.js';
 import CustomIcon from '../components/CustomIcon.js';
+import SwipeReveal from '../components/SwipeReveal.js';
+import LocationButton from '../components/LocationButton.js';
+
 
 const RecommendationsPostPage = ({ route, navigation }) => {
-  const { photoUri, title, recommendations} = route.params;
-
-  // // Mock data for recommendations
-  // const recommendations = [
-  //   {
-  //     "title": "Improve Pedestrian and Cyclist Infrastructure",
-  //     "content": "Introduce dedicated pedestrian walkways, crosswalks, and bike lanes to enhance safety and encourage active transportation modes. This can help reduce car dependency and promote a more livable environment."
-  //   },
-  //   {
-  //     "title": "Implement Traffic Calming Measures",
-  //     "content": "Consider traffic calming measures such as speed humps, narrower lane widths, or curb extensions to slow down vehicular traffic and prioritize pedestrian and cyclist safety."
-  //   },
-  //   {
-  //     "title": "Enhance Streetscaping and Greenery",
-  //     "content": "Incorporate street trees, landscaping, and green spaces along the corridor to improve the visual appeal, provide shade, and create a more pleasant environment for pedestrians and cyclists."
-  //   },
-  //   {
-  //     "title": "Encourage Mixed-Use Development",
-  //     "content": "Promote mixed-use development along the corridor, combining residential, commercial, and recreational spaces. This can create a more vibrant and walkable community, reducing the need for long-distance travel."
-  //   },
-  //   {
-  //     "title": "Improve Public Transportation Access",
-  //     "content": "Evaluate the need for public transportation options, such as bus routes or dedicated lanes, to provide alternative modes of transportation and reduce reliance on personal vehicles."
-  //   }
-  // ];
-
+  const { photoUri, title, recommendations, title, imgBefore, imgAfter, text} = route.params;
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.mainTitle}>{title || 'Recommendations'}</Text>
-      {photoUri && <Image source={{ uri: photoUri }} style={styles.image} />}
+      <Text style={styles.title}>{title || 'Recommendations'}</Text>
+      <LocationButton/>
+      {imgBefore && imgAfter ? (
+          <SwipeReveal image1={imgBefore} image2={imgAfter} style={styles.image} />
+        ) : null}
       <View style={styles.recommendationsContainer}>
         {recommendations.map((recommendation, index) => (
           <View key={index} style={styles.recommendationItem}>
@@ -50,11 +31,36 @@ const RecommendationsPostPage = ({ route, navigation }) => {
   );
 };
 
+
+
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
     backgroundColor: colors.white,
     padding: 20,
+  },
+  container: {
+    flex: 1,
+    padding: 15,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: colors.textPrimary,
+    marginBottom: 30,
+    textAlign: 'center',
+    marginTop: 50,
+  },
+  image: {
+    width: '100%',
+    aspectRatio: 4 / 3,
+    marginBottom: 20,
+  },
+  textContainer: {
+    marginTop: 25,
+    marginBottom: 30,
+    width: 350,
+    marginLeft: 10,
   },
   mainTitle: {
     fontSize: 24,
@@ -62,12 +68,6 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     marginBottom: 20,
     textAlign: 'center',
-  },
-  image: {
-    width: '100%',
-    height: 200,
-    marginBottom: 20,
-    borderRadius: 10,
   },
   recommendationsContainer: {
     marginBottom: 20,
