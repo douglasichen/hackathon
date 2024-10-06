@@ -42,11 +42,9 @@ const Main = ({ navigation }) => {
     });
 
     if (!result.canceled) {
-      navigation.navigate('NewRecommendationsPostPage', { });
+      navigation.navigate('RecommendationsPostPage', { photoUri: result.assets[0].uri });
     }
   };
-
-  
 
   const handleTakePhoto = async () => {
     // Ask for Location permission
@@ -59,7 +57,8 @@ const Main = ({ navigation }) => {
       });
 
       if (!result.canceled) {
-        navigation.navigate('NewRecommendationsPostPage', {  });
+        navigation.navigate('RecommendationsPostPage', { photoUri: result.assets[0].uri });
+
       }
     } else {
       Alert.alert('Camera permission not granted');

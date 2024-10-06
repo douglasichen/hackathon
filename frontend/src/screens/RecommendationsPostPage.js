@@ -8,8 +8,8 @@ import LocationButton from '../components/LocationButton.js';
 
 const RecommendationsPostPage = ({ route, navigation }) => {
   const { title, imgBefore, imgAfter, text } = route.params;
+  console.log("hi");
 
-  
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.container}>
@@ -27,10 +27,15 @@ const RecommendationsPostPage = ({ route, navigation }) => {
           <CustomIcon name="arrow-left" size={24} color={colors.white} />
           <Text style={styles.buttonText}>Go Back</Text>
         </TouchableOpacity>
+
+        
+        <LocationButton/>
       </ScrollView>
     </SafeAreaView>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   safeArea: {
