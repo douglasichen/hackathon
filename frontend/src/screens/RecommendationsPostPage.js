@@ -1,13 +1,15 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, ScrollView } from 'react-native';
-import { colors } from '../styles/colors.js';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView} from 'react-native';
+import  {colors}  from '../styles/colors.js';
 import CustomIcon from '../components/CustomIcon.js';
 import SwipeReveal from '../components/SwipeReveal.js';
 import LocationButton from '../components/LocationButton.js';
 
+
 const RecommendationsPostPage = ({ route, navigation }) => {
   const { title, imgBefore, imgAfter, text } = route.params;
 
+  
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.container}>

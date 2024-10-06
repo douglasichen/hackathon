@@ -3,15 +3,12 @@ import { StyleSheet, View, FlatList, SafeAreaView, Alert, TouchableOpacity } fro
 import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
 import { Camera } from 'expo-camera';
-import * as Location from 'expo-location';
 import { colors } from '../styles/colors.js';
 import { iconNames } from '../styles/icons.js';
 import TitleHeader from '../components/TitleHeader.js';
 import ListItem from '../components/ListItem.js';
 import LocationAccessRequest from '../components/LocationAccessRequest.js';
 import PhotoButton from '../components/PhotoButton.js';
-import LocationButton from '../components/LocationButton.js';
-import LocationModal from '../components/LocationModal.js';
 
 import StroadBefore from '../../assets/photos/stroadBefore.jpg';
 import StroadAfter from '../../assets/photos/stroadAfter.jpg';
@@ -23,8 +20,6 @@ const demoData = [
 const Main = ({ navigation }) => {
   const [showLocationRequest, setShowLocationRequest] = useState(true);
   const [hasPermission, setHasPermission] = useState(null);
-  const [showLocationModal, setShowLocationModal] = useState(false);
-  const [selectedPhotoUri, setSelectedPhotoUri] = useState(null);
 
   useEffect(() => {
     setTimeout(() => setShowLocationRequest(false), 3000);
@@ -47,12 +42,15 @@ const Main = ({ navigation }) => {
     });
 
     if (!result.canceled) {
-      setSelectedPhotoUri(result.assets[0].uri);
-      setShowLocationModal(true);
+      navigation.navigate('NewRecommendationsPostPage', { });
     }
   };
 
+  
+
   const handleTakePhoto = async () => {
+    // Ask for Location permission
+    <LocationAccessRequest />
     if (hasPermission) {
       let result = await ImagePicker.launchCameraAsync({
         allowsEditing: true,
@@ -61,30 +59,11 @@ const Main = ({ navigation }) => {
       });
 
       if (!result.canceled) {
-        setSelectedPhotoUri(result.assets[0].uri);
-        handleLocationFromDevice();
+        navigation.navigate('NewRecommendationsPostPage', {  });
       }
     } else {
       Alert.alert('Camera permission not granted');
     }
-  };
-
-  const handleLocationFromDevice = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Permission to access location was denied');
-      return;
-    }
-
-    let location = await Location.getCurrentPositionAsync({});
-    navigation.navigate('RecommendationsPostPage', { 
-      photoUri: selectedPhotoUri, 
-      location: `${location.coords.latitude}, ${location.coords.longitude}` 
-    });
-  };
-
-  const handleLocationSubmit = (location) => {
-    navigation.navigate('RecommendationsPostPage', { photoUri: selectedPhotoUri, location });
   };
 
   const handleItemPress = (item) => {
@@ -130,11 +109,6 @@ const Main = ({ navigation }) => {
           />
         </View>
       </View>
-      <LocationModal 
-        visible={showLocationModal}
-        onClose={() => setShowLocationModal(false)}
-        onSubmit={handleLocationSubmit}
-      />
     </SafeAreaView>
   );
 };
