@@ -13,11 +13,11 @@ import PhotoButton from '../components/PhotoButton.js';
 import LocationButton from '../components/LocationButton.js';
 import LocationModal from '../components/LocationModal.js';
 
+import StroadBefore from '../../assets/photos/stroadBefore.jpg';
+import StroadAfter from '../../assets/photos/stroadAfter.jpg';
+
 const demoData = [
-  { id: '1', title: 'Solar Panels' },
-  { id: '2', title: 'Recycling Program' },
-  { id: '3', title: 'Urban Garden' },
-  { id: '4', title: 'Electric Vehicles' },
+  { id: '1', title: 'Stroad Transformation', imgBefore: StroadBefore, imgAfter: StroadAfter, text: "This transformation shows how a typical stroad can be converted into a more pedestrian-friendly and aesthetically pleasing street." },
 ];
 
 const Main = ({ navigation }) => {
@@ -88,7 +88,7 @@ const Main = ({ navigation }) => {
   };
 
   const handleItemPress = (item) => {
-    navigation.navigate('RecommendationsPostPage', { title: item.title });
+    navigation.navigate('RecommendationsPostPage', { title: item.title, imgBefore: item.imgBefore, imgAfter: item.imgAfter, text: item.text });
   };
 
   if (showLocationRequest) {
