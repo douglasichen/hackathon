@@ -7,7 +7,8 @@ import LocationButton from '../components/LocationButton.js';
 
 
 const RecommendationsPostPage = ({ route, navigation }) => {
-  const { photoUri, title, recommendations, title, imgBefore, imgAfter, text} = route.params;
+  const { photoUri, title, recommendations, imgBefore, imgAfter, text} = route.params;
+  let recommendations_arr = recommendations || []
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>{title || 'Recommendations'}</Text>
@@ -16,7 +17,7 @@ const RecommendationsPostPage = ({ route, navigation }) => {
           <SwipeReveal image1={imgBefore} image2={imgAfter} style={styles.image} />
         ) : null}
       <View style={styles.recommendationsContainer}>
-        {recommendations.map((recommendation, index) => (
+        {recommendations_arr.map((recommendation, index) => (
           <View key={index} style={styles.recommendationItem}>
             <Text style={styles.recommendationTitle}>{recommendation.title}</Text>
             <Text style={styles.recommendationContent}>{recommendation.content}</Text>
